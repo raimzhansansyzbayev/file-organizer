@@ -1,5 +1,13 @@
 from pathlib import Path
-import shutil 
+import shutil
+from datetime import datetime
+
+LOG_FILE = Path(__file__).parent / "moves.log"
+
+def log(message):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(LOG_FILE, "a", encoding="utf-8") as f:
+        f.write(f"{now} | {message}\n")
 
 DRY_RUN = False # True = only print what would happen
 
@@ -39,4 +47,5 @@ for item in folder.iterdir():
     else:
         target_dir.mkdir(exist_ok=True)
         shutil.move(str(item), str(target))
-        print(f"Moved {item.name} -> {category}/")
+        log(f"{item} | {target}")      # <-- new line
+        print(f"MOVED: {item.name} -> {category}/")
